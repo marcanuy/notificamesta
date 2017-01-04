@@ -1,0 +1,1 @@
+from .multaviso import app

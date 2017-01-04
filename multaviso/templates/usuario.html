@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block body %}
+
+{% if user['screen_name'] %}
+Hola {{ user['screen_name'] }}!  
+{% endif %}
+
+<h2>User</h2>
+
+{% from "_formhelpers.html" import render_field %}
+<form method="POST" action="{{url_for('usuario')}}">
+    <dl>
+	{{ form.csrf_token }}
+	{{ render_field(form.email) }}
+	{{ render_field(form.matricula) }}
+	{{ render_field(form.notify) }}
+    </dl>
+    <p><input type="submit" value="Guardar">
+</form>
+
+<div>
+    {{ user }}
+</div>
+
+{% endblock %}
