@@ -27,15 +27,18 @@ tránsito
 > pueden presentarse hasta no recibir notificación formal por el Correo
 > o en la web del Diario Oficial IMPO. 
 
-# Commands
+# Installation
+
+~~~
+$ pip install -r requirements.txt
+$ export FLASK_APP=multaviso.py	
+~~~
+
+## Testing
 
 Config to load the application:
 
-    $ export FLASK_APP=multaviso.py	
 	$ export FLASK_DEBUG=1 #dev
-
-
-## Testing
 
 ## Deploy local server
 
