@@ -1,0 +1,10 @@
+{% if current_user.is_authenticated %}
+<p>Hola {{ current_user.twitter_screen_name }}!</p>
+<a href="{{ url_for('logout') }}">Salir</a>
+
+{% else %}
+<p>
+    Entrar con Twitter.
+</p>
+<a href="{{ url_for('login') }}"><img src="{{ url_for('static', filename='img/sign-in.png') }}" alt="log in"></a>
+{% endif %}

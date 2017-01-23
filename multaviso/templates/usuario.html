@@ -1,25 +1,49 @@
 {% extends "layout.html" %}
-{% block body %}
+{% block content %}
 
-{% if user['screen_name'] %}
-Hola {{ user['screen_name'] }}!  
-{% endif %}
-
-<h2>User</h2>
+<h2>{{ user.twitter_screen_name }}</h2>
 
 {% from "_formhelpers.html" import render_field %}
 <form method="POST" action="{{url_for('usuario')}}">
     <dl>
 	{{ form.csrf_token }}
-	{{ render_field(form.email) }}
 	{{ render_field(form.matricula) }}
-	{{ render_field(form.notify) }}
     </dl>
-    <p><input type="submit" value="Guardar">
+    <p><input type="submit" value="Guardar" class="btn btn-primary"></p>
 </form>
 
+{% if user.multas %}
+<h2>Multas registradas por {{user.matricula}}</h2>
 <div>
-    {{ user }}
+    <table class="table table-hover">
+	<thead>
+	    <tr>
+		<th>Fecha</th>
+		<th>Infraccion</th>
+		<th>Valor</th>
+		<th>Interseccion</th>
+	    </tr>
+	</thead>
+	<tbody>
+	    {% for multa in user.multas %}
+	    <tr>
+		<th scope="row">{{multa.fecha.strftime('%Y-%m-%d %H:%m')}}</th>
+		<td>{{multa.articulo}}</td>
+		<td>{{multa.valor}}</td>
+		<td>{{multa.interseccion}}</td>
+	    </tr>
+	    {% endfor %}
+	</tbody>
+    </table>
 </div>
+{% else %}
+<div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">Muy bien!</h4>
+    <p>No hay multas registradas para esta matricula.</p>
+    <p class="mb-0">Si detectamos alguna infraccion te avisaremos con un tuit a <a href="twitter.com/@{{ user.twitter_screen_name }}">@{{ user.twitter_screen_name }}</a></p>
+</div>
+{% endif %}
 
 {% endblock %}
+
+
