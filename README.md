@@ -1,48 +1,40 @@
+Multaviso
+======
 
-# Datos
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/marcanuy/multaviso/master/LICENSE)
 
-## Consulta de infracciones
+NotificamⒺsta
 
-Fiscalización electrónica de infracciones de
-tránsito
-<http://www.montevideo.gub.uy/fiscalizacion-electronica-de-infracciones-de-transito>
+# Environment Setup
 
-### Cómo saber si me aplicaron una multa
+    $ pip install -r requirements.txt
+    $ export FLASK_APP=multaviso/multaviso.py
+	
+For developing we need to load the **full path** of the configuration
+file `config/development.py` in the `APP_CONFIG_FILE` environment
+variable.
 
-> Para vehículos empadronados en Montevideo con domicilio registrado, se
-> remitirán notificaciones y resoluciones a dicho domicilio por medio
-> del Correo.
-> 
-> Para vehículos empadronados en Montevideo sin domicilio registrado,
-> con domicilio incorrecto y vehículos empadronados en el interior del
-> país, se publicarán notificaciones y resoluciones en la página web de
-> IMPO.
-> 
-> Multas disponibles a partir de transcurridas 72 horas hábiles de
-> cometida la infracción
-> en <http://www.montevideo.gub.uy/consultainfracciones>.
+    $ export APP_CONFIG_FILE=$(realpath config/development.py)
 
-> La visualización de archivos fotográficos no debe considerarse como
-> notificación de multa por infracción. Los descargos o apelaciones no
-> pueden presentarse hasta no recibir notificación formal por el Correo
-> o en la web del Diario Oficial IMPO. 
+Create database schema
 
-# Installation
+    $ flask shell
+	>>> from multaviso import db
+    >>> db.create_all()
 
-~~~
-$ pip install -r requirements.txt
-$ export FLASK_APP=multaviso.py	
-~~~
+
+## Running local server
+
+In the root folder:
+
+    $ flask run
+    * Serving Flask app "multaviso.multaviso"
+    * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 
 ## Testing
 
-Config to load the application:
-
-	$ export FLASK_DEBUG=1 #dev
-
-## Deploy local server
-
-
+	$ python tests/test_multaviso.py
+	
 # Pendientes
 
 - hacer modelo
@@ -66,8 +58,21 @@ Config to load the application:
 
 ## Twitter oauth
 
+### flask-oauthlib
+
+- <http://flask-oauthlib.readthedocs.io/en/latest/index.html>
+  Flask-OAuthlib is designed to be a replacement for Flask-OAuth
+  
 - <https://github.com/lepture/flask-oauthlib/>
   - <https://github.com/lepture/flask-oauthlib/blob/master/example/twitter.py>
+
+### Login flow
+
+1. route '/' index
+2. login button -> route '/login' login
+3. twitter.authorize 
+4. route 'oauthorized'  next=..
+5. https://api.twitter.com/oauth/authorize
 
 ## Database
 
@@ -84,3 +89,7 @@ Config to load the application:
 
 - Python 3 unittest <https://docs.python.org/3/library/unittest.html#module-unittest> 
 - 
+
+# License
+
+MIT licensed.
