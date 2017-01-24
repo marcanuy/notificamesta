@@ -65,7 +65,10 @@ class Contravencion(db.Model):
         self.interseccion = interseccion
         self.intervenido = intervenido
         self.articulo = articulo
-        self.valor = valor
+        if valor is '':
+            self.valor = 0
+        else:
+            self.valor = valor
         self.notificacion = notificacion
 
         
