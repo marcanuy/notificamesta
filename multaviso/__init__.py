@@ -25,12 +25,23 @@ tuit = os.getenv('MULTAVISO_TUIT')
 
 oauth = OAuth(app)
 # connect to a remote application
+
+if 'TWITTER_NOTIFY_CONSUMER_KEY' not in app.config:
+    app.config['TWITTER_NOTIFY_CONSUMER_KEY'] = os.getenv('TWITTER_NOTIFY_CONSUMER_KEY')
+if 'TWITTER_NOTIFY_CONSUMER_SECRET' not in app.config:
+    app.config['TWITTER_NOTIFY_CONSUMER_SECRET'] = os.getenv('TWITTER_NOTIFY_CONSUMER_SECRET')
+if 'TWITTER_CONSUMER_KEY' not in app.config:
+    app.config['TWITTER_CONSUMER_KEY'] = os.getenv('TWITTER_CONSUMER_KEY')
+if 'TWITTER_CONSUMER_SECRET' not in app.config:
+    app.config['TWITTER_CONSUMER_SECRET'] = os.getenv('TWITTER_CONSUMER_SECRET')
+
+
 twitter=None
 if tuit=="True":
     twitter = oauth.remote_app(
         'twitter',
-        consumer_key = os.getenv('TWITTER_NOTIFY_CONSUMER_KEY', app.config['TWITTER_NOTIFY_CONSUMER_KEY']),
-        consumer_secret = os.getenv('TWITTER_NOTIFY_CONSUMER_SECRET', app.config['TWITTER_NOTIFY_CONSUMER_SECRET']),
+        consumer_key = app.config['TWITTER_NOTIFY_CONSUMER_KEY'],
+        consumer_secret = app.config['TWITTER_NOTIFY_CONSUMER_SECRET'],
         base_url = app.config['TWITTER_BASE_URL'], #prefixed to all relative URLs used in the remote app
         request_token_url = app.config['TWITTER_REQUEST_TOKEN_URL'],
         access_token_url = app.config['TWITTER_ACCESS_TOKEN_URL'],
@@ -39,8 +50,8 @@ if tuit=="True":
 else:
     twitter = oauth.remote_app(
         'twitter',
-        consumer_key = os.getenv('TWITTER_CONSUMER_KEY', app.config['TWITTER_CONSUMER_KEY']),
-        consumer_secret = os.getenv('TWITTER_CONSUMER_SECRET', app.config['TWITTER_CONSUMER_SECRET']),
+        consumer_key = app.config['TWITTER_CONSUMER_KEY'],
+        consumer_secret = app.config['TWITTER_CONSUMER_SECRET'],
         base_url = app.config['TWITTER_BASE_URL'], #prefixed to all relative URLs used in the remote app
         request_token_url = app.config['TWITTER_REQUEST_TOKEN_URL'],
         access_token_url = app.config['TWITTER_ACCESS_TOKEN_URL'],
