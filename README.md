@@ -16,7 +16,19 @@ variable.
 
     $ export APP_CONFIG_FILE=$(realpath config/development.py)
 
-Create database schema
+Configure SQLAlchemy development database with
+`SQLALCHEMY_DATABASE_URI` environment variable: 
+
+You can configure a PostgreSQL local database in
+  `/instance/config.py` setting the `SQLALCHEMY_DATABASE_URI`
+  environment variable like: `SQLALCHEMY_DATABASE_URI =
+  'postgresql://myuser:mypassword@localhost/mydatabase'`.
+  
+If you don't specify anything, then it will look for a sqlite3
+database: `multaviso/development.sqlite3` as specified in
+`config/development.py`:
+
+Then we create the schema:
 
     $ flask shell
 	>>> from multaviso import db
