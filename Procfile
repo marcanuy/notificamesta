@@ -1,1 +1,1 @@
-web: gunicorn multaviso.app
+web: gunicorn multaviso.multaviso.app
