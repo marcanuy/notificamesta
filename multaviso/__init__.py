@@ -6,8 +6,11 @@ from flask_login import LoginManager
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config.default')
-app.config.from_pyfile('config.py')
 app.config.from_envvar('APP_CONFIG_FILE')
+# optionally have custom configurations in /instance/config.py
+# not git versioned
+app.config.from_pyfile('config.py', silent=True) 
+
 
 
 
