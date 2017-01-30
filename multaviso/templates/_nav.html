@@ -2,15 +2,17 @@
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 	<span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="{{ url_for('index') }}">MulTuit</a>
+    <a class="navbar-brand" href="{{ url_for('pages.home') }}">MulTuit</a>
     <div class="collapse navbar-collapse" id="navbars">
 	<ul class="navbar-nav mr-auto">
 	    {% if current_user.is_authenticated %}
 	    <li class="nav-item dropdown">
 		<a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user fa-fw"></i> Usuario</a>
 		<div class="dropdown-menu" aria-labelledby="dropdown01">
+		    {#
 		    <a class="dropdown-item" href="{{ url_for('usuario')}}"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i> Editar</a>
 		    <a class="dropdown-item" href="{{ url_for('logout')}}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Salir</a>
+		    #}
 		</div>
 	    </li>
 	    {% endif %}

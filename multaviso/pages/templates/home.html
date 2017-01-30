@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
 {% block title %}Index{% endblock %}
 
 {% block head %}
@@ -13,9 +13,10 @@
 <div class="cover">
     <h1>Tus multas, un tuit a la vez</h1>
     <p class="lead">Enterate cuando te quieran multar, después de notificado tenés 10 días para apelar.</p>
+    <p class="lead">Ingresas tu matricula una vez y en el momento que se registre una multa te avisamos.</p>
     {% if not current_user.is_authenticated %}
     <p class="lead">
-	<a href="{{ url_for('login') }}" class="btn btn-lg btn-primary"><i class="fa fa-twitter fa-2x pr-2 align-middle" aria-hidden="true"></i>Ingresar con Twitter</a>
+	<a href="{# url_for('login') #}" class="btn btn-lg btn-primary"><i class="fa fa-twitter fa-2x pr-2 align-middle" aria-hidden="true"></i>Ingresar con Twitter</a>
     </p>
     {% endif %}
 </div>

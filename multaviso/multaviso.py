@@ -1,123 +1,34 @@
 # coding: utf-8
-from multaviso import app, twitter, db, lm
-from flask import g, session, request, url_for, flash
-from flask import redirect, render_template
-from cgi import escape
-from flask_wtf import FlaskForm
-from wtforms import Form, BooleanField, StringField
-from wtforms.validators import DataRequired, Length
-from flask_login import UserMixin, login_user, logout_user, current_user, login_required
+
 import click
+import datetime
 import urllib.request
 from bs4 import BeautifulSoup
-import datetime
+from cgi import escape
+from flask import g, session, request, url_for, flash
+from flask import redirect, render_template
+from flask_login import login_user, logout_user, current_user, login_required
+from flask_wtf import FlaskForm
+from sqlalchemy import desc
+from wtforms import Form, BooleanField, StringField
+from wtforms.validators import DataRequired, Length
 
-def get_or_create_user(session, model, **kwargs):
-    instance = session.query(model).filter_by(twitter_user_id=kwargs["twitter_user_id"]).first()
-    if instance:
-        return instance
-    else:
-        instance = model(**kwargs)
-        session.add(instance)
-        session.commit()
-        return instance
-
-class Notificacion(db.Model):
-    #__tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    numero = db.Column(db.Integer, unique=True) #e.g.: 4-2016
-    url = db.Column(db.String(200), unique=True)
-    bajado = db.Column(db.DateTime)
-    html = db.Column(db.Text)
-    contravenciones = db.relationship('Contravencion', backref='notificacion',
-                                lazy='select')
-
-    def __init__(self, numero, url, html, bajado=None):
-        self.numero = numero
-        self.url = url
-        self.bajado = bajado
-        if bajado is None:
-            self.bajado = datetime.datetime.utcnow()
-        else:
-            self.bajado = bajado
-        self.html = html
-        
-class Contravencion(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    matricula = db.Column(db.String(15))
-    fecha = db.Column(db.DateTime, nullable=True)
-    interseccion = db.Column(db.String(300), nullable=True)
-    intervenido = db.Column(db.String(200), nullable=True)
-    articulo = db.Column(db.String(200), nullable=True)
-    valor = db.Column(db.Integer, nullable=True)
-    tuiteado = db.Column(db.Boolean, unique=False, default=False)
-    
-    notificacion_id = db.Column(db.Integer, db.ForeignKey('notificacion.id'))
-    #notificacion = db.relationship('Notificacion',
-    #                                   backref=db.backref('contravencion', lazy='dynamic'))
-
-    def __init__(self, notificacion, matricula="", interseccion="", intervenido="", articulo="", valor=0, fecha=None):
-        self.matricula=matricula
-        if fecha is None:
-            self.fecha = datetime.datetime.utcnow()
-        else:
-            self.fecha = fecha
-        self.interseccion = interseccion
-        self.intervenido = intervenido
-        self.articulo = articulo
-        if valor is '':
-            self.valor = 0
-        else:
-            self.valor = valor
-        self.notificacion = notificacion
-
-        
-class User(UserMixin, db.Model):
-    #__tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    # social_id = db.Column(db.String(64), nullable=False, unique=True)
-    # nickname = db.Column(db.String(64), nullable=False)
-    email = db.Column(db.String(120), nullable=True)
-    twitter_screen_name = db.Column(db.String(20), unique=True)
-    twitter_user_id = db.Column(db.String(64), unique=True)
-    matricula = db.Column(db.String(10), unique=True)
-    created_at = db.Column(db.DateTime, nullable=True)
-
-    def __init__(self, twitter_screen_name, twitter_user_id, email="", matricula=""):
-        self.twitter_screen_name = twitter_screen_name
-        self.twitter_user_id = twitter_user_id
-        self.email = email
-        self.matricula = matricula
-        self.created_at = datetime.datetime.utcnow()
-
-    def __repr__(self):
-        return '<Usuario %r>' % escape(self.twitter_screen_name)
-
-    def __str__(self):
-        return str(self.__dict__)
-
-    def __eq__(self, other): 
-        return self.__dict__ == other.__dict__
-
-    @property
-    def multas(self):
-        multas = Contravencion.query.filter_by(matricula=self.matricula).all()
-        return multas
-
-    def multas_sin_tuitear(self):
-        """ obtener las multas que no se hayan tuiteado y que sean mas nuevas que la fecha de creado el usuario en el sitema """
-        multas = Contravencion.query.filter(Contravencion.matricula==self.matricula) \
-                                    .filter(Contravencion.tuiteado==False) \
-                                    .filter(Contravencion.fecha>self.created_at) \
-                                    .all()
-        return multas
+# def get_or_create_user(session, model, **kwargs):
+#     instance = session.query(model).filter_by(twitter_user_id=kwargs["twitter_user_id"]).first()
+#     if instance:
+#         return instance
+#     else:
+#         instance = model(**kwargs)
+#         session.add(instance)
+#         session.commit()
+#         return instance
 
 class UserForm(FlaskForm):
     matricula = StringField(u'Matricula', validators=[Length(min=3, max=10), DataRequired()])
     #email = StringField('Correo', validators=[Length(min=6, max=120)])
     #notify = BooleanField('Notificar por Twitter', default=True)
 
-@lm.user_loader
+@login_manager.user_loader
 def load_user(id):
     if id != "None":
         return User.query.get(int(id))
@@ -128,17 +39,6 @@ def get_twitter_token():
         resp = session['twitter_oauth']
         return resp['oauth_token'], resp['oauth_token_secret']
 
-@app.route('/usuario', methods=('GET', 'POST'))
-@login_required
-def usuario():
-    form = UserForm()
-    if form.validate_on_submit():
-        db.session.query(User).filter_by(id=current_user.id).update({"matricula": form.matricula.data})
-        db.session.commit()
-        flash('Datos actualizados. A partir de ahora, si detectamos alguna multa por radar te avisamos con un tuit.')
-    user = User.query.get(current_user.id)
-    form.matricula.data = user.matricula
-    return render_template('usuario.html', user=current_user, form=form)
 
 # @app.route('/info')
 # def info():
@@ -237,7 +137,7 @@ def oauthorized():
     return redirect(url_for('usuario'))
 
 def numero_notificacion_nueva():
-    ultima_notificacion = Notificacion.query.order_by('-numero').first()
+    ultima_notificacion = Notificacion.query.order_by(desc('numero')).first()
     if ultima_notificacion is None:
         numero = 1
     else:
@@ -292,5 +192,5 @@ def bajar():
             response = urllib.request.urlopen(url)
             data = response.read()
 
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#     app.run()

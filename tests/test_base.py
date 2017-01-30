@@ -3,30 +3,27 @@ import unittest
 import tempfile
 
 import sys
-
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from multaviso import db
-from multaviso.multaviso import app, get_or_create_user, numero_notificacion_nueva
-from multaviso.models import  User, Contravencion, Notificacion
-from flask_login import login_user, logout_user, current_user
-from flask import url_for
-from urllib.parse import urlparse
-from datetime import date
 
-#import desde /multaviso/multaviso.py
-#from multaviso.multaviso import ####
+from multaviso import create_app, db
+from flask_testing import TestCase # flask-testing
 
-class BasicTests(unittest.TestCase):
+
+class BasicTests(TestCase):
+
+    def create_app(self):
+        app = create_app()
+        return app
 
     def setUp(self):
         # Config a temporary database
         # mkstemp() returns a tuple containing an OS-level handle 
         # to an open file (as would be returned by os.open()) and
         # the absolute pathname of that file, in that order.
-        self.db_fd, app.config['DATABASE'] = tempfile.mkstemp()
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-            app.config['DATABASE']
-        self.app = app.test_client()
+        self.db_fd, self.app.config['DATABASE'] = tempfile.mkstemp()
+        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
+            self.app.config['DATABASE']
+        self.app = self.app.test_client()
         #lm = LoginManager(self.app)
         #lm.login_view = 'index'
 
@@ -37,10 +34,10 @@ class BasicTests(unittest.TestCase):
         db.session.remove()
         db.drop_all()
 
-
-    def test_main_page(self):
-        response = self.app.get('/', follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+    def test_home_page(self):
+        response = self.client.get('/', follow_redirects=True)
+        self.assert200(response)
+        self.assertTemplateUsed('home.html')
 
     # def test_create_user_create_if_not_exists(self):
     #     user = User("tstname","12345")
