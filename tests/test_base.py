@@ -3,13 +3,12 @@ import unittest
 import tempfile
 
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from multaviso import create_app, db
 from flask_testing import TestCase # flask-testing
+from multaviso.users.models import User
 
-
-class BasicTests(TestCase):
+class BaseTestCase(TestCase):
 
     def create_app(self):
         app = create_app()
@@ -20,24 +19,21 @@ class BasicTests(TestCase):
         # mkstemp() returns a tuple containing an OS-level handle 
         # to an open file (as would be returned by os.open()) and
         # the absolute pathname of that file, in that order.
+
         self.db_fd, self.app.config['DATABASE'] = tempfile.mkstemp()
         self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-            self.app.config['DATABASE']
-        self.app = self.app.test_client()
+           self.app.config['DATABASE']
+        #self.app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///testing.sqlite3"
+
         #lm = LoginManager(self.app)
         #lm.login_view = 'index'
-
         db.drop_all()
         db.create_all()
+        #self.client = self.app.test_client()
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
-
-    def test_home_page(self):
-        response = self.client.get('/', follow_redirects=True)
-        self.assert200(response)
-        self.assertTemplateUsed('home.html')
 
     # def test_create_user_create_if_not_exists(self):
     #     user = User("tstname","12345")
@@ -129,6 +125,6 @@ class BasicTests(TestCase):
     #     multas=user.multas_sin_tuitear()
     
     #     self.assertEqual(1,len(multas))
-        
+
 if __name__ == "__main__":
     unittest.main()

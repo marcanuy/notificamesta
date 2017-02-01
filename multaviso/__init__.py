@@ -9,34 +9,27 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_oauthlib.client import OAuth
 from flask_sqlalchemy import SQLAlchemy
-from .models import db
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 
 # connect to a remote application
-#oauth = OAuth(app)
-oauth = OAuth()
+#oauth = OAuth()
 
-twitter = oauth.remote_app(
-    'twitter',
-    base_url='https://api.twitter.com/1/',
-    request_token_url='https://api.twitter.com/oauth/request_token',
-    access_token_url='https://api.twitter.com/oauth/access_token',
-    authorize_url='https://api.twitter.com/oauth/authenticate',
-    app_key='TWITTER'
-)
+# import OAuthSign after initializing db
+from multaviso.oauth.model import OAuthSignIn
+twitter = OAuthSignIn.get_provider('twitter')
 
 def create_app(config_file=None):
     app = Flask(__name__, instance_relative_config=True)
 
     load_config(app, config_file)
 
+    db.init_app(app)
+
     load_blueprints(app)
     
-    #lm = LoginManager(app)
     login_manager.init_app(app)
-    login_manager.login_view = 'index'
 
     # detect if we are just tweeting 
     tuit = os.getenv('MULTAVISO_TUIT')
@@ -50,10 +43,11 @@ def create_app(config_file=None):
             'consumer_key': os.getenv('TWITTER_CONSUMER_KEY'),
             'consumer_secret': os.getenv('TWITTER_CONSUMER_SECRET'),
         }
-    oauth.init_app(app)    
+    #twitter.get_oauth()
+    #print(twitter.service)
+    twitter.oauth.init_app(app)    
+    
 
-    db.app = app
-    db.init_app(app)
     return app
 
 def load_config(app, config_file):
@@ -77,9 +71,20 @@ def load_config(app, config_file):
 def load_blueprints(app):
     """Load blueprints."""
     from .users.views import users_blueprint
-    #from .oauth.views import oauth_blueprint
+    from .oauth.views import oauth_blueprint
     from .pages.views import pages_blueprint
 
     app.register_blueprint(users_blueprint, url_prefix='/users')
-    #app.register_blueprint(oauth_blueprint, url_prefix='/oauth')
+    app.register_blueprint(oauth_blueprint, url_prefix='/oauth')
     app.register_blueprint(pages_blueprint)
+
+from multaviso.users.models import User
+
+login_manager.login_view = 'pages.home'
+login_manager.login_message = "Tenés que estar registrado para ver esta página, podes entrar con Twitter."
+login_manager.login_message_category = "error"
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Load the logged in user for the LoginManager."""
+    return User.query.filter(User.id == int(user_id)).first()

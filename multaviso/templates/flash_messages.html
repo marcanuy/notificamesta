@@ -1,11 +1,26 @@
-{% with messages = get_flashed_messages() %}
+{% with messages = get_flashed_messages(category_filter=["info"]) %}
 {% if messages %}
 <div class="messages">
-    {% for message in messages %}
-    <div class="alert alert-success" role="alert">
-	{{ message }}
+    <div class="alert alert-info" role="alert">
+        <ul>
+            {% for message in messages %}
+            <li>{{ message | safe }}</li>
+            {% endfor %}
+        </ul>
     </div>
-    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+{% with messages = get_flashed_messages(category_filter=["error"]) %}
+{% if messages %}
+<div class="messages">
+    <div class="alert alert-error" role="alert">
+        <ul>
+            {% for message in messages %}
+            <li>{{ message | safe }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endif %}
 {% endwith %}

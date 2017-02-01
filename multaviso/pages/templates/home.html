@@ -16,7 +16,7 @@
     <p class="lead">Ingresas tu matricula una vez y en el momento que se registre una multa te avisamos.</p>
     {% if not current_user.is_authenticated %}
     <p class="lead">
-	<a href="{# url_for('login') #}" class="btn btn-lg btn-primary"><i class="fa fa-twitter fa-2x pr-2 align-middle" aria-hidden="true"></i>Ingresar con Twitter</a>
+	<a href="{{ url_for('oauth.login', provider='twitter') }}" class="btn btn-lg btn-primary"><i class="fa fa-twitter fa-2x pr-2 align-middle" aria-hidden="true"></i>Ingresar con Twitter</a>
     </p>
     {% endif %}
 </div>
