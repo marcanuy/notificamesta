@@ -9,7 +9,6 @@ NotificamⒺsta
 
     $ pip install -r requirements.txt
     $ export PYTHONPATH="/full/path/to/root/folder/"
-    $ export APP_CONFIG_FILE="full/path/to/config/development.py"
     $ export FLASK_APP=notificamestaapp.py
 	
 Configure SQLAlchemy development database with
