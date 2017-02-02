@@ -1,8 +1,8 @@
 from flask import url_for, session
 from flask_oauthlib.client import OAuth
 from flask_login import login_user
-from multaviso.users.models import User
-from multaviso import db
+from notificamesta.users.models import User
+from notificamesta import db
 
 class OAuthSignIn():
 

@@ -1,4 +1,4 @@
-from multaviso import db
+from notificamesta import db
 from flask_login import UserMixin
 import datetime
 

@@ -1,4 +1,4 @@
-from multaviso import db
+from notificamesta import db
 from flask import Blueprint
 from flask import render_template
 

@@ -17,13 +17,13 @@ login_manager = LoginManager()
 #oauth = OAuth()
 
 # import OAuthSign after initializing db
-from multaviso.oauth.model import OAuthSignIn
+from notificamesta.oauth.model import OAuthSignIn
 twitter = OAuthSignIn.get_provider('twitter')
 
-def create_app(config_file=None):
+def create_app(env_type=None):
     app = Flask(__name__, instance_relative_config=True)
 
-    load_config(app, config_file)
+    load_config(app, env_type)
 
     db.init_app(app)
 
@@ -32,7 +32,7 @@ def create_app(config_file=None):
     login_manager.init_app(app)
 
     # detect if we are just tweeting 
-    tuit = os.getenv('MULTAVISO_TUIT')
+    tuit = os.getenv('NOTIFICAMESTA_TUIT')
     if tuit=="True":
         app.config['TWITTER'] = {
             'consumer_key': os.getenv('TWITTER_NOTIFY_CONSUMER_KEY'),
@@ -50,7 +50,7 @@ def create_app(config_file=None):
 
     return app
 
-def load_config(app, config_file):
+def load_config(app, env_type):
     """
     
 
@@ -58,7 +58,10 @@ def load_config(app, config_file):
     1. Load environment variables: /.env
     2. Load in app.config
       1. /config/default.py
-      2. APP_CONFIG_FILE env variable filename (e.g.: /config/development.py)
+      2. environment type:
+         - testing
+         - development
+         - production
       3. /instance/config.py #optional
     """
     ## load environment variables from .env (dotenv)
@@ -66,11 +69,23 @@ def load_config(app, config_file):
     dotenv_path = os.path.join(APP_ROOT, '.env')
     load_dotenv(dotenv_path)
     
+    ## load default config
     app.config.from_object('config.default')
-    if config_file is None and 'APP_CONFIG_FILE' in os.environ:
-        app.config.from_envvar('APP_CONFIG_FILE')
+    ## load the environment dependent config
+
+    config_path = os.path.join(APP_ROOT, 'config')    
+    if env_type is "testing":
+        app.config.from_pyfile( os.path.join(config_path, "testing.py") )
+    elif env_type is "development":
+        app.config.from_pyfile( os.path.join(config_path, "development.py") )
+    elif env_type is "production":
+        app.config.from_pyfile( os.path.join(config_path, "production.py") )
     else:
-        app.config.from_pyfile(config_file)
+        print("Wrong environment, you need to specify a configuration file when calling create_app.")
+    # if config_file is None and 'APP_CONFIG_FILE' in os.environ:
+    #     app.config.from_envvar('APP_CONFIG_FILE')
+    # else:
+    #     app.config.from_pyfile(config_file)
     
 
 
@@ -89,7 +104,7 @@ def load_blueprints(app):
     app.register_blueprint(oauth_blueprint, url_prefix='/oauth')
     app.register_blueprint(pages_blueprint)
 
-from multaviso.users.models import User
+from notificamesta.users.models import User
 
 login_manager.login_view = 'pages.home'
 login_manager.login_message = "Tenés que estar registrado para ver esta página, podes entrar con Twitter."

@@ -8,9 +8,9 @@ from mock import MagicMock
 from flask_oauthlib.client import OAuthRemoteApp
 from tests.test_base import BaseTestCase
 from flask import url_for, session
-from multaviso import create_app, db
-from multaviso.oauth.model import OAuthSignIn
-from multaviso.users.models import User
+from notificamesta import create_app, db
+from notificamesta.oauth.model import OAuthSignIn
+from notificamesta.users.models import User
 from flask_login import current_user
 
 class OauthTestCase(BaseTestCase):

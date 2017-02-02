@@ -4,14 +4,14 @@ import tempfile
 
 import sys
 
-from multaviso import create_app, db
+from notificamesta import create_app, db
 from flask_testing import TestCase # flask-testing
-from multaviso.users.models import User
+#from notificamesta.users.models import User
 
 class BaseTestCase(TestCase):
 
     def create_app(self):
-        app = create_app()
+        app = create_app('testing')
         return app
 
     def setUp(self):

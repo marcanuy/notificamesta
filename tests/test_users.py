@@ -6,8 +6,8 @@ from mock import patch
 from mock import MagicMock
 from tests.test_base import BaseTestCase
 from flask import url_for, session
-from multaviso import create_app, db
-from multaviso.users.models import User
+from notificamesta import create_app, db
+from notificamesta.users.models import User
 from flask_login import current_user
 
 class UsersTestCase(BaseTestCase):

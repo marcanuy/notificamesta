@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """users/views.py: User views."""
 
-from multaviso import db
+from notificamesta import db
 from flask import Blueprint, session, flash, redirect, url_for, render_template
 from flask_login import login_required
 from flask_login import logout_user
