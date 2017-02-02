@@ -51,17 +51,28 @@ def create_app(config_file=None):
     return app
 
 def load_config(app, config_file):
-    # load config
+    """
+    
+
+    Config load order:
+    1. Load environment variables: /.env
+    2. Load in app.config
+      1. /config/default.py
+      2. APP_CONFIG_FILE env variable filename (e.g.: /config/development.py)
+      3. /instance/config.py #optional
+    """
+    ## load environment variables from .env (dotenv)
+    APP_ROOT = os.path.join(os.path.dirname(__file__), '..')
+    dotenv_path = os.path.join(APP_ROOT, '.env')
+    load_dotenv(dotenv_path)
+    
     app.config.from_object('config.default')
     if config_file is None and 'APP_CONFIG_FILE' in os.environ:
         app.config.from_envvar('APP_CONFIG_FILE')
     else:
         app.config.from_pyfile(config_file)
     
-    ## load dotenv
-    APP_ROOT = os.path.join(os.path.dirname(__file__), '..')   # refers to application_top
-    dotenv_path = os.path.join(APP_ROOT, '.env')
-    load_dotenv(dotenv_path)
+
 
     # optionally have custom configurations in /instance/config.py
     # not git versioned

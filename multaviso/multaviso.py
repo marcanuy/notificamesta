@@ -8,10 +8,8 @@ from cgi import escape
 from flask import g, session, request, url_for, flash
 from flask import redirect, render_template
 from flask_login import login_user, logout_user, current_user, login_required
-from flask_wtf import FlaskForm
+
 from sqlalchemy import desc
-from wtforms import Form, BooleanField, StringField
-from wtforms.validators import DataRequired, Length
 
 # def get_or_create_user(session, model, **kwargs):
 #     instance = session.query(model).filter_by(twitter_user_id=kwargs["twitter_user_id"]).first()
@@ -22,11 +20,6 @@ from wtforms.validators import DataRequired, Length
 #         session.add(instance)
 #         session.commit()
 #         return instance
-
-class UserForm(FlaskForm):
-    matricula = StringField(u'Matricula', validators=[Length(min=3, max=10), DataRequired()])
-    #email = StringField('Correo', validators=[Length(min=6, max=120)])
-    #notify = BooleanField('Notificar por Twitter', default=True)
 
 @login_manager.user_loader
 def load_user(id):
