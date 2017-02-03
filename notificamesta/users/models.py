@@ -18,7 +18,7 @@ class User(UserMixin, db.Model):
     matricula = db.Column(db.String(10), unique=True, nullable=True)
     created_at = db.Column(db.DateTime, nullable=True)
 
-    def __init__(self, twitter_user_id, twitter_screen_name="", matricula="", token=""):
+    def __init__(self, twitter_user_id, twitter_screen_name=None, matricula=None, token=None):
 #        self.twitter_screen_name = twitter_screen_name
         self.twitter_user_id = twitter_user_id
         self.twitter_screen_name = twitter_screen_name

@@ -2,11 +2,13 @@
 {% block title %}Usuario{% endblock %}
 
 {% block content %}
-
 <h2>{{ user.twitter_screen_name }}</h2>
 
+{% if not current_user.matricula %}
+<p class="lead">Ingresa tu matricula y quedas en el sistema</p>
+
 {% from "_formhelpers.html" import render_field %}
-<form method="POST" action="{{url_for('usuario')}}">
+<form method="POST" action="{{url_for('users.usuario')}}">
     <dl>
 	{{ form.csrf_token }}
 	{{ render_field(form.matricula) }}
@@ -14,6 +16,7 @@
     <p><input type="submit" value="Guardar" class="btn btn-primary"></p>
 </form>
 
+{% else %}
 {% if user.multas %}
 <h2>Multas registradas por {{user.matricula}}</h2>
 <div>
@@ -41,11 +44,12 @@
 {% else %}
 <div class="alert alert-success" role="alert">
     <h4 class="alert-heading">Muy bien!</h4>
-    <p>No hay multas registradas para esta matricula.</p>
+    <p>No hay multas registradas para la matricula {{ user.matricula }}.</p>
     <p class="mb-0">Si detectamos alguna infraccion te avisaremos con un tuit a <a href="twitter.com/@{{ user.twitter_screen_name }}">@{{ user.twitter_screen_name }}</a></p>
 </div>
 {% endif %}
 
+{% endif %}
 {% endblock %}
 
 

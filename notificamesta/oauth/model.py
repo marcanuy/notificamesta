@@ -44,6 +44,9 @@ class OAuthSignIn():
     def get_user_data(self):
         return None
 
+    def get_user(self, data):
+        return None
+    
 class TwitterSignIn(OAuthSignIn):
 
     def __init__(self):
@@ -76,7 +79,8 @@ class TwitterSignIn(OAuthSignIn):
 
     def get_user_data(self, data=None):
         """
-        Returns user data sent from Twitter in response
+        Retrieves user data sent from Twitter in response
+        Return example: ('175838359', 'marcanuy')
         """
         if data is None:
             return (
@@ -89,10 +93,13 @@ class TwitterSignIn(OAuthSignIn):
                 data['screen_name']
             )
     
-    def get_user(self, data=None):
-        print(self.get_user_data(data))
+    def get_user(self, data=None, force=False):
+        """
+        This will return ``True`` if the log in attempt succeeds, and ``False`` if
+        it fails (i.e. because the user is inactive).
+        """
+        
         user_id, screen_name = self.get_user_data(data)
-        print("userid: %s" % user_id)
         user = User.query.filter_by(twitter_user_id=user_id).first()
         if user is None:
             user = User(twitter_user_id=user_id,
@@ -101,4 +108,4 @@ class TwitterSignIn(OAuthSignIn):
             db.session.add(user)
             db.session.commit()
 
-        login_user(user)
+        return login_user(user, force=force)

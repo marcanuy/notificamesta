@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Editar Usuario{% endblock %}
+
+{% block content %}
+<h2>{{ user.twitter_screen_name }}</h2>
+
+
+<p class="lead">Actualizar datos</p>
+
+{% from "_formhelpers.html" import render_field %}
+<form method="POST" action="{{url_for('users.usuario')}}">
+    <dl>
+	{{ form.csrf_token }}
+	{{ render_field(form.matricula) }}
+    </dl>
+    <p><input type="submit" value="Guardar" class="btn btn-primary"></p>
+</form>
+
+{% endblock %}
+
+
