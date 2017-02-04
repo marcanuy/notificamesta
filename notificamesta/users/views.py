@@ -34,9 +34,7 @@ def usuario():
         db.session.query(User).filter_by(id=current_user.id).update({"matricula": form.matricula.data})
         db.session.commit()
         flash('Datos actualizados. A partir de ahora, si detectamos alguna infraccion por radar de la matricula %s te avisamos por Twitter.' % current_user.matricula)
-    print("user current_user: %s" % current_user)
     form.matricula.data = current_user.matricula
-    #user=current_user
     return render_template('usuario.html', user=current_user, form=form)
 
 @users_blueprint.route('/edit', methods=('GET', 'POST'))

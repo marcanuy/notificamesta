@@ -71,7 +71,6 @@ class TwitterSignIn(OAuthSignIn):
         e.g. to keep an authorized login: 
         session['oauth_token'] = oauth.get_session_data(resp)
         """
-        print("data: %s" % data)
         return (
             data['oauth_token'],
             data['oauth_token_secret']
