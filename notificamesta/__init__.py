@@ -43,7 +43,7 @@ def create_app(env_type=None):
             'consumer_key': os.getenv('TWITTER_CONSUMER_KEY'),
             'consumer_secret': os.getenv('TWITTER_CONSUMER_SECRET'),
         }
-    app.config.secret_key = os.getenv('SECRET_KEY')
+    app.secret_key = os.getenv('SECRET_KEY')
     #twitter.get_oauth()
     #print(twitter.service)
     twitter.oauth.init_app(app)    
