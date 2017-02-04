@@ -16,9 +16,11 @@
 	<title>{% block title %}{% endblock %}</title>
 	<meta name="description" content="{% block meta_description %}{% endblock %}">
 	{% endblock %}
+	<!-- Google Search Console verification -->
+	<meta name="google-site-verification" content="WXxv3uZifpa-aofYT_1aephdoRrDwoNMjq43AELJoXs" />
     </head>
     <body>
-
+	{% include '_ganalytics.html' %}
 	{% include '_nav.html' %}
 
 	<div class="container my-2">
