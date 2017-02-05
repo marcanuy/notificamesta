@@ -1,14 +1,22 @@
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 body {
+    /* Margin bottom by footer height */
+    margin-bottom: 61.8px;
+    
+    
 }
 .footer {
-  width: 100%;
-  line-height: 60px;
-  background-color: #f5f5f5;
-  margin-top: 15px;
+    margin-/top: 15px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 61.8px;
+    line-height: 61.8px; /* Vertically center the text there */
+    background-color: #f5f5f5;
 }
 
 .site-menu li:last-child {
@@ -26,15 +34,40 @@ body {
 }
 
 .container {
-  width: auto;
-  /*max-width: 680px;*/
-  max-width:1618px;
-  padding: 3rem 1.5rem;
-  padding: 0 15px;
+    width: auto;
+    /*max-width: 680px;*/
+    max-width:1618px;
+    padding: 3rem 1.5rem;
+    padding: 0 15px;
 }
 
-.cover {
-    padding: 5rem 1.5rem;
+#home-cover {
+    padding: 4rem 1.2rem;
     text-align: center;
+    font-weight:100; 
+    background: rgba(0,0,0,0.3);
+    color: white;
+    pad/ding: 2rem;
+    wid/th: 40%;
+    mar/gin:2rem;
+    fl/oat: right;
+    font/-size: 1.2rem;
 }
 
+
+video#bgvid { 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    background: url(https://s3-us-west-2.amazonaws.com/coverr/poster/Traffic-blurred2.jpg) no-repeat;
+    background-size: cover; 
+}
