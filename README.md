@@ -7,7 +7,7 @@ NotificamⒺsta is built with [Flask](http://flask.pocoo.org/), a Python framewo
 
 # Contributing
 
-factory_boy is distributed under the MIT License.
+Distributed under the MIT License.
 
 Issues should be opened through [GitHub Issues](http://github.com/marcanuy/notificamesta/issues/); whenever possible, a pull request should be included.
 Questions and suggestions are welcome.
