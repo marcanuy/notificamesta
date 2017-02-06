@@ -4,6 +4,7 @@
 """Main app entry point."""
 
 import os
+
 from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
@@ -100,10 +101,12 @@ def load_blueprints(app):
     from .users.views import users_blueprint
     from .oauth.views import oauth_blueprint
     from .pages.views import pages_blueprint
+    from .multas.views import multas_blueprint
 
     app.register_blueprint(users_blueprint, url_prefix='/users')
     app.register_blueprint(oauth_blueprint, url_prefix='/oauth')
     app.register_blueprint(pages_blueprint)
+#    app.register_blueprint(multas_blueprint)
 
 from notificamesta.users.models import User
 

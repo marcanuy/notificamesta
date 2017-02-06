@@ -1,6 +1,7 @@
 from notificamesta import db
 from flask_login import UserMixin
 import datetime
+from notificamesta.multas.models import Contravencion
 
 class User(UserMixin, db.Model):
 
@@ -58,10 +59,10 @@ class User(UserMixin, db.Model):
         """Representation."""
         return '<user {}>'.format(self.twitter_user_id)
 
-    # @property
-    # def multas(self):
-    #     multas = Contravencion.query.filter_by(matricula=self.matricula).all()
-    #     return multas
+    @property
+    def multas(self):
+        multas = Contravencion.query.filter_by(matricula=self.matricula).all()
+        return multas
 
     # def multas_sin_tuitear(self):
     #     """ obtener las multas que no se hayan tuiteado y que sean mas nuevas que la fecha de creado el usuario en el sitema """
