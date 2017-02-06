@@ -61,7 +61,7 @@ class User(UserMixin, db.Model):
 
     @property
     def multas(self):
-        multas = Contravencion.query.filter_by(matricula=self.matricula).all()
+        multas = Contravencion.query.filter_by(matricula=self.matricula.upper()).all()
         return multas
 
     # def multas_sin_tuitear(self):
