@@ -16,7 +16,7 @@ body {
     /* Set the fixed height of the footer here */
     height: 61.8px;
     line-height: 61.8px; /* Vertically center the text there */
-    background-color: #f5f5f5;
+    background-color: #f7f7f7;
 }
 
 .site-menu li:last-child {
@@ -55,19 +55,37 @@ body {
 }
 
 
-video#bgvid { 
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    z-index: -100;
-    -ms-transform: translateX(-50%) translateY(-50%);
-    -moz-transform: translateX(-50%) translateY(-50%);
-    -webkit-transform: translateX(-50%) translateY(-50%);
-    transform: translateX(-50%) translateY(-50%);
-    background: url(https://s3-us-west-2.amazonaws.com/coverr/poster/Traffic-blurred2.jpg) no-repeat;
-    background-size: cover; 
+.video-container {
+    position: relative;
+}
+video {
+  hei/ght: auto;
+  max-/height: 400px;
+  vertical-align: middle;
+  width: 100%;
+}
+.overlay-desc {
+  background: rgba(0,0,0,0);
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* home features */
+/* Center align the text within the three columns below the video */
+.features {
+    margin: 2em auto;
+}
+.features .col-lg-4 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.features h2 {
+  font-weight: normal;
+}
+.features .col-lg-4 p {
+  margin-right: .75rem;
+  margin-left: .75rem;
 }

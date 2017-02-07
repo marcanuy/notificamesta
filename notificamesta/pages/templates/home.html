@@ -10,27 +10,56 @@
 
 {% block content %}
 
-<video playsinline autoplay muted loop poster="https://s3-us-west-2.amazonaws.com/coverr/poster/Traffic-blurred2.jpg" id="bgvid">
-    <!-- source src="video.webm" type="video/webm" -->
-    <source src="https://s3-us-west-2.amazonaws.com/coverr/mp4/Traffic-blurred2.mp4" type="video/mp4">
-</video>
 
-<div class="container">
-    <div class="row justify-content-md-center">
-	<div class="col col-lg-2">
-	</div>
-	<div class="col-12 col-md-auto" id="home-cover">
-	    <h1>Tus multas, un tuit a la vez</h1>
-	    <p class="lead">Enterate cuando te quieran multar, después de notificado tenés 10 días para apelar.</p>
-	    <p class="lead">Ingresás tu matricula una vez y en el momento que se registre una multa te avisamos.</p>
-	    {% if not current_user.is_authenticated %}
-	    <p class="lead">
-		<a href="{{ url_for('oauth.login', provider='twitter') }}" class="btn btn-lg btn-primary"><i class="fa fa-twitter fa-2x pr-2 align-middle" aria-hidden="true"></i>Ingresar con Twitter</a>
-	    </p>
-	    {% endif %}
-	</div>
-	<div class="col col-lg-2">
+<div class="video-container">
+    <video playsinline autoplay muted loop poster="https://s3-us-west-2.amazonaws.com/coverr/poster/Traffic-blurred2.jpg">
+	<source src="https://s3-us-west-2.amazonaws.com/coverr/mp4/Traffic-blurred2.mp4" type="video/mp4">
+    </video>
+
+
+    <div class="container overlay-desc">
+	<div class="row justify-content-md-center">
+	    <div class="col col-lg-2">
+	    </div>
+	    <div class="col-12 col-md-auto" id="home-cover">
+		<h1>Tus multas, un tuit a la vez</h1>
+		<p class="lead">Enterate cuando te quieran multar, después de notificado tenés 10 días para apelar.</p>
+		<p class="lead">Ingresás tu matricula una vez y en el momento que se registre una multa te avisamos.</p>
+		{% if not current_user.is_authenticated %}
+		<p class="lead">
+		    <a href="{{ url_for('oauth.login', provider='twitter') }}" class="btn btn-lg btn-primary"><i class="fa fa-twitter fa-2x pr-2 align-middle" aria-hidden="true"></i>Ingresar con Twitter</a>
+		</p>
+		{% endif %}
+	    </div>
+	    <div class="col col-lg-2">
+	    </div>
 	</div>
     </div>
+
+
 </div>
+
+<div class="container features">
+    <div class="row">
+        <div class="col-lg-4">
+	    <i class="fa fa-github fa-fw fa-4x" aria-hidden="true"></i> 
+            <h2>Código Abierto</h2>
+            <p>Esta web esta hecha en Flask/Python y el código está disponible en Github. Cualquiera puede contribuir a su desarrollo y proponer mejoras o ideas.</p>
+            <p><a class="btn btn-secondary" href="https://github.com/marcanuy/notificamesta" role="button">Ver proyecto &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+	    <i class="fa fa-twitter fa-fw fa-4x" aria-hidden="true"></i> 
+            <h2>Twitter</h2>
+            <p>Las notificaciones se hacen por la cuenta de Twitter al usuario que se haya registrado en la web. Solamente se notifica el tipo de infracción, no se muestra la matrícula del usuario.</p>
+            <p><a class="btn btn-secondary" href="https://twitter.com/notificamesta" role="button">Ver Twitter &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+	    <i class="fa fa-road fa-fw fa-4x" aria-hidden="true"></i> 
+            <h2>Multas</h2>
+            <p>Las notificaciones por Twitter son solamente avisos no oficiales de multas por infracción. Los descargos o apelaciones no pueden presentarse hasta no recibir notificación formal por el Correo o en la web del Diario Oficial IMPO.</p>
+            <p><a class="btn btn-secondary" href="http://www.montevideo.gub.uy/consultainfracciones" role="button">View details &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+    </div><!-- /.row -->
+</div>
+
 {% endblock %}
