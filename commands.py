@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""multas/views.py: Multas views."""
+"""multas/commands.py: Commands."""
 
 import click
 import datetime
 from notificamesta import db, create_app
-from .models import Notificacion, Contravencion
+from notificamesta.multas.models import Notificacion, Contravencion
 from sqlalchemy import desc
 import urllib.request
 from bs4 import BeautifulSoup
 from cgi import escape
 from datetime import date
+from flask_script import Manager
+
+app = create_app('development')
+manager = Manager(app)
 
 def _numero_notificacion_nueva():
     ultima_notificacion = Notificacion.query.order_by(desc('numero')).first()
@@ -23,12 +27,11 @@ def _numero_notificacion_nueva():
 def _pagina_notificaciones_tiene_datos(data):
     return b"NOTIFICACION POR CONTRAVENCION A NORMAS DE TRANSITO" in data
 
-@click.command()
+@manager.command
 def bajar():
     """
     Run the application
     """
-    app = create_app('development')
     with app.app_context():
         numero = _numero_notificacion_nueva()
         current_year = date.today().year
@@ -73,4 +76,5 @@ def bajar():
                 response = urllib.request.urlopen(url)
                 data = response.read()
 
-                
+if __name__ == "__main__":
+    manager.run()
