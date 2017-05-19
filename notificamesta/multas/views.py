@@ -13,3 +13,6 @@ multas_blueprint = Blueprint(
     template_folder='templates'
 )
 
+@multas_blueprint.route('/')
+def data():
+    return render_template('data.html')

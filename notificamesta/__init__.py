@@ -105,8 +105,9 @@ def load_blueprints(app):
 
     app.register_blueprint(users_blueprint, url_prefix='/users')
     app.register_blueprint(oauth_blueprint, url_prefix='/oauth')
+    app.register_blueprint(multas_blueprint, url_prefix='/multas')
     app.register_blueprint(pages_blueprint)
-#    app.register_blueprint(multas_blueprint)
+
 
 from notificamesta.users.models import User
 
