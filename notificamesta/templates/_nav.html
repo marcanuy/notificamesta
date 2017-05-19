@@ -1,11 +1,8 @@
 <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse ">
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-	<span class="navbar-toggler-icon"></span>
-    </button>
     <a class="navbar-brand" href="{{ url_for('pages.home') }}">Notificame Ésta</a>
+    {% if current_user.is_authenticated %}
     <div class="collapse navbar-collapse" id="navbars">
 	<ul class="navbar-nav mr-auto">
-	    {% if current_user.is_authenticated %}
 	    <li class="nav-item dropdown">
 		<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user fa-fw"></i> Usuario</a>
 		<div class="dropdown-menu" aria-labelledby="dropdown01">
@@ -14,7 +11,7 @@
 		    <a class="dropdown-item" href="{{ url_for('users.logout')}}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Salir</a>
 		</div>
 	    </li>
-	    {% endif %}
 	</ul>
     </div>
+    {% endif %}
 </nav>
