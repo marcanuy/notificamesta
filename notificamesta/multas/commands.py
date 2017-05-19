@@ -10,6 +10,7 @@ from sqlalchemy import desc
 import urllib.request
 from bs4 import BeautifulSoup
 from cgi import escape
+from datetime import date
 
 def _numero_notificacion_nueva():
     ultima_notificacion = Notificacion.query.order_by(desc('numero')).first()
@@ -30,10 +31,11 @@ def bajar():
     app = create_app('development')
     with app.app_context():
         numero = _numero_notificacion_nueva()
-        click.echo('Buscando notificacion numero: %s-2016' % numero)
+        current_year = date.today().year
+        click.echo('Buscando notificacion numero: {}-{}'.format(numero,current_year))
         procesar = True
         while(procesar):
-            url='http://impo.com.uy/bases/notificaciones-cgm/%s-2016' % numero
+            url='http://impo.com.uy/bases/notificaciones-cgm/{}-{}'.format(numero,current_year)
             click.echo("Procesando: " + url)
             response = urllib.request.urlopen(url)
             data = response.read()
@@ -66,7 +68,7 @@ def bajar():
                     db.session.add(contravencion)
                 db.session.commit()
                 numero += 1
-                url='http://impo.com.uy/bases/notificaciones-cgm/%s-2016' % numero
+                url='http://impo.com.uy/bases/notificaciones-cgm/{}-{}'.format(numero,current_year)
                 click.echo("Chequeando si %s tiene datos" % url)
                 response = urllib.request.urlopen(url)
                 data = response.read()
