@@ -1,24 +1,43 @@
 {% extends "base.html" %}
 {% block title %}Estadísticas de multas en Uruguay - Notificame Ésta{% endblock %}
 {% block meta_description %}Estadísticas de multas detectadas por los radares en Uruguay.{% endblock %}
+
 {% block head %}
 {{ super() }}
-<style type="text/css">
- .important { color: #336699; }
-</style>
+<!-- chartist-js -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+<!-- end chartist-js -->
 {% endblock %}
 
 {% block content %}
-
 
 <h1>Multas en Uruguay</h1>
 <hr>
 <div class="container">
     <p class="lead">Estadísticas de multas detectadas por los radares en Uruguay.</p>
+
+    <h2>Los radares con mayor cantidad de infracciones</h2>
+    <!-- chartist container -->
+    <div class="ct-chart ct-golden-section"></div>
 </div>
 
 
 
+
+<script type="text/javascript">
+
+ var data = {
+     labels: {{lista[1]|safe}},
+     series: [{{lista[0]|safe}}]  
+ };
+ var options = {
+     distributeSeries: true
+ };
+
+ new Chartist.Bar('.ct-chart', data);
+ Chartist.animate();
+</script>
 
 
 
