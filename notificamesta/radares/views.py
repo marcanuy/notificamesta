@@ -1,40 +1,41 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""multas/views.py: Multas views."""
+"""radares/views.py: Radares views."""
 
 import click
 from notificamesta import db
 from notificamesta.multas.models import Contravencion
+from notificamesta.radares.models import Radar
 from flask import Blueprint, session, flash, redirect, url_for, render_template
-#from .models import User
 from flask import current_app as app
-import json
+#from .models import User
 
-multas_blueprint = Blueprint(
-    'multas', __name__,
+
+radares_blueprint = Blueprint(
+    'radares', __name__,
     template_folder='templates'
 )
 
-@multas_blueprint.route('/')
+@radares_blueprint.route('/<int:radar_id>', methods=['GET'])
+def radar(radar_id):
+    radar = Radar.query.get(radar_id)
+    if radar == None:
+        abort(404)
+    return render_template('radar.html', radar=radar)
+
+
+@radares_blueprint.route('/')
 def data():
     sql="select * from (\
     Select count(interseccion) as\
     multas,interseccion from\
     contravencion group by interseccion order by multas desc) \
-    as multaPorRadar order by multas desc limit 5"
+    as multaPorRadar order by multas desc limit 10"
     l = db.engine.execute(sql).fetchall()
     infraccionesPorRadar = [list(t) for t in zip(*l)]
     #pairs up the elements from all inputs
-    print(infraccionesPorRadar)
-
-
-    sql_multas_por_radar = "select * from (Select count(interseccion) as multas, r.latitud,r.longitud from contravencion as c \
-    left join radar as r on r.id=c.radar_id \
-    group by c.interseccion, r.id) as result where latitud!=''"
-    multas_por_radar = db.engine.execute(sql_multas_por_radar).fetchall()
-    print(multas_por_radar)
-    
     #db.session.query(User).filter_by(id=current_user.id).update({"matricula": form.matricula.data})
     #return render_template('data.html', top5)
     maps_key=app.config['GOOGLE_MAPS_API_KEY']
-    return render_template('data.html', lista=infraccionesPorRadar, google_maps_api_key=maps_key, multas_por_radar=multas_por_radar)
+    radares=Radar.query.all()
+    return render_template('lista.html', lista=infraccionesPorRadar, google_maps_api_key=maps_key, radares=radares)

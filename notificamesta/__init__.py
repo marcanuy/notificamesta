@@ -102,10 +102,12 @@ def load_blueprints(app):
     from .oauth.views import oauth_blueprint
     from .pages.views import pages_blueprint
     from .multas.views import multas_blueprint
+    from .radares.views import radares_blueprint
 
     app.register_blueprint(users_blueprint, url_prefix='/users')
     app.register_blueprint(oauth_blueprint, url_prefix='/oauth')
     app.register_blueprint(multas_blueprint, url_prefix='/multas')
+    app.register_blueprint(radares_blueprint, url_prefix='/radares')
     app.register_blueprint(pages_blueprint)
 
 

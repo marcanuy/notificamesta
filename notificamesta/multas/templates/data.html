@@ -14,15 +14,45 @@
 
 <h1>Multas en Uruguay</h1>
 <hr>
+
+
 <div class="container">
     <p class="lead">Estadísticas de multas detectadas por los radares en Uruguay.</p>
 
-    <h2>Los radares con mayor cantidad de infracciones</h2>
+    <h2>Mapa de radares por cantidad de multas</h2>
+    <div id="map" style="width:100%;height:400px"></div>
+    <script>
+
+
+
+     function initMap() {
+	 /* Data points defined as a mixture of WeightedLocation and LatLng objects */
+	 var heatMapData = [
+	     {% for item in multas_por_radar %}
+	     {location: new google.maps.LatLng({{item.latitud}}, {{item.longitud}}), weight: {{item.multas}}}{{ "," if not loop.last }}
+	     {% endfor %}
+	 ];
+
+	 var montevideo = new google.maps.LatLng(-34.8858606,-56.1498617);
+	 
+	 map = new google.maps.Map(document.getElementById('map'), {
+	     zoom: 12,
+	     center: montevideo,
+	     mapTypeId: 'satellite'
+	 });
+
+	 var heatmap = new google.maps.visualization.HeatmapLayer({
+	     data: heatMapData
+	 });
+	 heatmap.setMap(map);
+     }
+
+    </script>
+
+    <h2>Top 5 de radares por cantidad de infracciones</h2>
     <!-- chartist container -->
     <div class="ct-chart ct-golden-section"></div>
 </div>
-
-
 
 
 <script type="text/javascript">
@@ -40,5 +70,7 @@
 </script>
 
 
-
+<!-- googlemaps -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&libraries=visualization&callback=initMap"
+			 type="text/javascript"></script>
 {% endblock %}

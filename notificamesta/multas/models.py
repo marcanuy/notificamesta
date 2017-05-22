@@ -31,6 +31,7 @@ class Contravencion(db.Model):
     tuiteado = db.Column(db.Boolean, unique=False, default=False)
     
     notificacion_id = db.Column(db.Integer, db.ForeignKey('notificacion.id'))
+    radar_id = db.Column(db.Integer, db.ForeignKey('radar.id'))
     #notificacion = db.relationship('Notificacion',
     #                                   backref=db.backref('contravencion', lazy='dynamic'))
 
