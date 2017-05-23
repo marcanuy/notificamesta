@@ -14,18 +14,8 @@
 
 <h1>Radares en Uruguay</h1>
 
-<div id="map" style="width=80%;min-height:350px"></div>
 <script>
- /* var map;
-  * function initMap() {
-  *     map = new google.maps.Map(document.getElementById('map'), {
-  *         zoom: 13,
-  *         center: new google.maps.LatLng(-34.8858606,-56.1498617),
-  *         mapTypeId: 'terrain'
-  *     });
 
-  * }
-  */
  function initMap() {
      var map;
      var mapOptions = {
@@ -81,30 +71,6 @@
 <style type="text/css">
  #map_canvas { width: 100%; height: 400px; }
 </style>
-
-<ul id="map-zipCodes" style="display:none;">
-    {% for radar in radares %}
-    <li>{{radar.nombre}}</li>
-    {% endfor %}
-</ul>
-
-<ul id="map-latitudes" style="display:none;">
-    {% for radar in radares %}
-    <li>{{radar.latitude}}</li>
-    {% endfor %}
-</ul>
-
-<ul id="map-longitudes" style="display:none;">
-    {% for radar in radares %}
-    <li>{{radar.longitud}}</li>
-    {% endfor %}
-</ul>
-
-<ul id="map-Units" style="display:none;">
-    {% for radar in radares %}
-    <li>234</li>
-    {% endfor %}
-</ul>
 
 <div id="map_canvas"></div>
 

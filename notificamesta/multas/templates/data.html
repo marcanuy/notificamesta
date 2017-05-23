@@ -18,13 +18,11 @@
 
 <div class="container">
     <p class="lead">Estadísticas de multas detectadas por los radares en Uruguay.</p>
+    <p class="text-muted">Última actualización: {{fecha_actualizacion}}</p>
 
-    <h2>Las zonas de Montevideo con mayor cantidad de infracciones de tránsito.</h2>
-    <div id="map" style="width:100%;height:600px"></div>
+    <h2>Concentración de infracciones de tránsito en Montevideo.</h2>
+    <div id="map" style="width:100%;height:600px" class="my-2"></div>
     <script>
-
-
-
      function initMap() {
 	 /* Data points defined as a mixture of WeightedLocation and LatLng objects */
 	 var heatMapData = [
@@ -58,17 +56,19 @@
 
 
     <h2>Las multas favoritas de los montevideanos</h2>
+    <h3>Por tipo de infracción</h3>
     <div id="chartMoney" class="ct-chart ct-golden-section"></div>
 
 
 
 
-    <h2>Los radares favoritos de los montevideanos</h2>
+    <h3>Por radar</h3>
     <p> Estos son los cinco radares con más infracciones en Montevideo.</p>
     <!-- chartist container -->
     <div id="chartTop5" class="ct-chart ct-golden-section"></div>
 
-
+    <h2>Multas y recaudación por mes</h2>
+    <div id="chartByMonth"class="ct-chart ct-golden-section"></div>
 </div>
 
 
@@ -120,6 +120,29 @@
 
  new Chartist.Pie('#chartMoney', data, options, responsiveOptions);
 
+
+
+
+ new Chartist.Line('#chartByMonth', {
+     labels: {{multas_por_mes[0]|safe}},
+     series: [
+	 {{multas_por_mes[1]}},
+	 {{multas_por_mes[2]}}
+     ]
+ }, {
+     /* high: 10000,
+      * low: 0,*/
+     fullWidth: true,
+     // As this is axis specific we need to tell Chartist to use whole numbers only on the concerned axis
+     /* axisY: {
+	onlyInteger: true,
+	offset: 20
+      * }*/
+     
+     chartPadding: {
+	 right: 40
+     }
+ });
 
 </script>
 
