@@ -19,8 +19,8 @@
 <div class="container">
     <p class="lead">Estadísticas de multas detectadas por los radares en Uruguay.</p>
 
-    <h2>Mapa de radares por cantidad de multas</h2>
-    <div id="map" style="width:100%;height:400px"></div>
+    <h2>Las zonas de Montevideo con mayor cantidad de infracciones de tránsito.</h2>
+    <div id="map" style="width:100%;height:600px"></div>
     <script>
 
 
@@ -33,40 +33,94 @@
 	     {% endfor %}
 	 ];
 
-	 var montevideo = new google.maps.LatLng(-34.8858606,-56.1498617);
+	 var montevideo = new google.maps.LatLng(-34.887372, -56.119129);
 	 
 	 map = new google.maps.Map(document.getElementById('map'), {
-	     zoom: 12,
+	     zoom: 13,
 	     center: montevideo,
-	     mapTypeId: 'satellite'
+	     mapTypeId: 'hybrid'
 	 });
 
 	 var heatmap = new google.maps.visualization.HeatmapLayer({
 	     data: heatMapData
 	 });
 	 heatmap.setMap(map);
+         heatmap.set('radius', heatmap.get('radius') ? null : 50);
+
      }
 
     </script>
 
-    <h2>Top 5 de radares por cantidad de infracciones</h2>
+    <h2>Recaudado</h2>
+    <p>Teniendo en cuenta los datos publicados por el <a href="https://www.impo.com.uy/diariooficial">Diario Oficial en Línea - IMPO</a> el total recaudado sería de: <span  class="text-danger">$ {{recaudado}}</span>.</p>
+    <p class="alert alert-info">Cálculo tomando la Unidad Reajustable <a href="www.ine.gub.uy/unidad-reajustable">(U.R.)</a> de Mayo 2017 Valor: $ {{unidad_reajustable}}</p>
+
+
+
+    <h2>Las multas favoritas de los montevideanos</h2>
+    <div id="chartMoney" class="ct-chart ct-golden-section"></div>
+
+
+
+
+    <h2>Los radares favoritos de los montevideanos</h2>
+    <p> Estos son los cinco radares con más infracciones en Montevideo.</p>
     <!-- chartist container -->
-    <div class="ct-chart ct-golden-section"></div>
+    <div id="chartTop5" class="ct-chart ct-golden-section"></div>
+
+
 </div>
 
 
 <script type="text/javascript">
 
- var data = {
+ new Chartist.Bar('#chartTop5', {
      labels: {{lista[1]|safe}},
      series: [{{lista[0]|safe}}]  
- };
- var options = {
-     distributeSeries: true
+ }, {
+     seriesBarDistance: 10,
+     reverseData: true,
+     horizontalBars: true,
+     axisY: {
+	 offset: 70
+     }
+
+ });
+
+
+ 
+
+
+
+ var data = {
+     labels: {{tipo_multa[2]|safe}},
+     series: {{tipo_multa[0]}}
  };
 
- new Chartist.Bar('.ct-chart', data);
- Chartist.animate();
+ var options = {
+     labelInterpolationFnc: function(value) {
+	 return value[0]
+     }
+ };
+
+ var responsiveOptions = [
+     ['screen and (min-width: 640px)', {
+	 chartPadding: 30,
+	 labelOffset: 100,
+	 labelDirection: 'explode',
+	 labelInterpolationFnc: function(value) {
+	     return value;
+	 }
+     }],
+     ['screen and (min-width: 1024px)', {
+	 labelOffset: 80,
+	 chartPadding: 20
+     }]
+ ];
+
+ new Chartist.Pie('#chartMoney', data, options, responsiveOptions);
+
+
 </script>
 
 
